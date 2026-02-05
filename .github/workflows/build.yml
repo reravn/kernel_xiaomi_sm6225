@@ -11,7 +11,7 @@ jobs:
       contents: read
 
     steps:
-      - name: build Kernel
+      - name: build kernel
         uses: dabao1955/kernel_build_action@main
         with:
           kernel-url: https://github.com/reravn/kernel_xiaomi_sm6225
@@ -26,7 +26,7 @@ jobs:
           ksu-other: true
           ksu-url: https://github.com/backslashxx/KernelSU
           bbg: true
-          other-clang-url: https://github.com/ZyCromerZ/Clang/releases/download/12.0.1-20230207-release/Clang-12.0.1-20230207.tar.gz
+          other-clang-url: https://github.com/ZyCromerZ/Clang/releases/download/15.0.7-20260205-release/Clang-15.0.7-20260205.tar.gz
           disable-lto: true
           anykernel3: true
           anykernel3-url: https://github.com/alternoegraha/AnyKernel3-680
