@@ -16,7 +16,7 @@ jobs:
         with:
           kernel-url: https://github.com/reravn/kernel_xiaomi_sm6225
           kernel-branch: ye
-          config: fog-perf_defconfig
+          config: vendor/fog-perf_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: false
