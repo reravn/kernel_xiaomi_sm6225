@@ -579,7 +579,7 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
 			seq_write(m, "[vdso]\n", 7);
 			return;
 		}
-		if (bypass_show_map_vma(vma) {
+		if (bypass_show_map_vma(vma)) {
 			seq_write(m, "[vdso]\n", 7);
 			return;
 		}
