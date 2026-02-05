@@ -26,7 +26,7 @@ jobs:
           ksu-other: true
           ksu-url: https://github.com/backslashxx/KernelSU
           bbg: true
-          other-clang-url: https://github.com/ZyCromerZ/Clang/releases/download/15.0.7-20251111-release/Clang-15.0.7-20251111.tar.gz
+          other-clang-url: https://github.com/ZyCromerZ/Clang/releases/download/14.0.6-20250704-release/Clang-14.0.6-20250704.tar.gz
           disable-lto: true
           anykernel3: true
           anykernel3-url: https://github.com/alternoegraha/AnyKernel3-680
