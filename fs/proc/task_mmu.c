@@ -28,6 +28,19 @@
 
 #define SEQ_PUT_DEC(str, val) \
 		seq_put_decimal_ull_width(m, str, (val) << (PAGE_SHIFT-10), 8)
+
+static int bypass_show_map_vma(struct vm_area_struct *vma) {
+        struct file *file = vma->vm_file;
+        vm_flags_t flags = vma->vm_flags;
+        if (file && file->f_path.dentry && (strstr(file->f_path.dentry->d_iname, "frida-") || strstr(file->f_path.dentry->d_iname, "/data/local/tmp/")))
+                return 1;
+        if (file && file->f_path.dentry && strstr(file->f_path.dentry->d_iname, "libart.so") && (flags & VM_EXEC))
+                return 1;
+        if (file && file->f_path.dentry && (strstr(file->f_path.dentry->d_iname, "memfd:jit-cache") || strstr(file->f_path.dentry->d_iname, "memfd:jit-zygote-cache")))
+                return 1;
+        return 0;
+}
+
 void task_mem(struct seq_file *m, struct mm_struct *mm)
 {
 	unsigned long text, lib, swap, anon, file, shmem;
@@ -502,6 +515,9 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
 	dev_t dev = 0;
 	const char *name = NULL;
 
+	if (bypass_show_map_vma(vma) == 1)
+		return;
+	
 	if (file) {
 		struct inode *inode = file_inode(vma->vm_file);
 		dev = inode->i_sb->s_dev;
@@ -563,7 +579,10 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
 			seq_write(m, "[vdso]\n", 7);
 			return;
 		}
-
+		if (bypass_show_map_vma(vma) {
+			seq_write(m, "[vdso]\n", 7);
+			return;
+		}
 		if (vma->vm_start <= mm->brk &&
 		    vma->vm_end >= mm->start_brk) {
 			seq_write(m, "[heap]\n", 7);
@@ -1019,8 +1038,9 @@ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss)
 static int show_smap(struct seq_file *m, void *v)
 {
 	struct vm_area_struct *vma = v;
-	struct mem_size_stats mss;
-
+	struct mem_size_stats 
+	if (bypass_show_map_vma(vma) == 1)
+		return 0;
 	memset(&mss, 0, sizeof(mss));
 
 	smap_gather_stats(vma, &mss);
