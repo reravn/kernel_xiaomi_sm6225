@@ -1,0 +1,32 @@
+name: build kernel
+on:
+  workflow_dispatch:
+
+jobs:
+  Build-Kernel:
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: build Kernel
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: https://github.com/reravn/kernel_xiaomi_sm6225
+          kernel-branch: ye
+          config: fog_ksu.config
+          arch: arm64
+          aosp-gcc: true
+          aosp-clang: false
+          ksu: true
+          ksu-version: v3.0.0-122
+          ksu-lkm: false
+          ksu-other: true
+          ksu-url: https://github.com/backslashxx/KernelSU
+          bbg: true
+          other-clang-url: https://github.com/ZyCromerZ/Clang/releases/download/15.0.7-20251111-release/Clang-15.0.7-20251111.tar.gz
+          disable-lto: true
+          anykernel3: true
+          anykernel3-url: https://github.com/alternoegraha/AnyKernel3-680
