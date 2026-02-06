@@ -149,6 +149,17 @@ struct pid_entry {
 		NULL, &proc_pid_attr_operations,	\
 		{ .lsm = LSM })
 
+static inline uid_t get_task_uid(struct task_struct *task)
+{
+	uid_t uid = 0;
+	const struct cred *cred;
+
+	cred = get_task_cred(task);
+	uid = cred->uid.val;
+
+	put_cred(cred);
+	return uid;
+}
 /*
  * Count the number of hardlinks for the pid_entry table, excluding the .
  * and .. links.
@@ -386,8 +397,10 @@ static int proc_pid_wchan(struct seq_file *m, struct pid_namespace *ns,
 {
 	unsigned long wchan;
 	char symname[KSYM_NAME_LEN];
-
-	if (!ptrace_may_access(task, PTRACE_MODE_READ_FSCREDS))
+	struct task_struct *tracer;
+	tracer = ptrace_parent(task);
+	
+	if (wchan && tracer && (get_task_uid(tracer) == get_task_uid(task)) && ptrace_may_access(task, PTRACE_MODE_READ_FSCREDS))
 		goto print0;
 
 	wchan = get_wchan(task);
